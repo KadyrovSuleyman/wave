@@ -1,0 +1,22 @@
+
+div audio {
+  display: block;
+  margin-bottom:50px;
+  margin-left:10px;
+}
+
+/* x5 */
+#myCanvas {
+  /* width: 210px;
+  height: 40px; */
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 20px;
+  box-sizing: border-box;
+  border-radius: 20px;
+}
+
+.main {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
