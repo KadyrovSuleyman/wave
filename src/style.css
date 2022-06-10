@@ -13,6 +13,8 @@ div audio {
   padding: 20px;
   box-sizing: border-box;
   border-radius: 20px;
+
+  color: rgb(255, 195, 100)
 }
 
 .main {

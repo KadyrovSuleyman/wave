@@ -4,7 +4,11 @@ const main = document.createElement('div')
 main.className = 'main'
 document.body.appendChild(main)
 
-import sound from './sound/MainMenuLoop.ogg'
+// import sound from './sound/Helmet.ogg'
+// import sound from './sound/In-Cockpit.ogg'
+// import sound from './sound/MainMenuLoop.ogg'
+import sound from './sound/World.ogg'
+
 const player = document.createElement('audio')
 player.src = sound
 player.id = 'player'
@@ -14,8 +18,8 @@ player.canPlayType = 'audio/mp3'
 main.appendChild(player)
 
 const canvas = document.createElement('canvas')
-canvas.width = 1280 + 2 * 20  // x5
-canvas.height = 200 + 8.75   // x5
+canvas.width = 950  // x5
+canvas.height = 255 + 10   // x5
 canvas.id = 'myCanvas'
 main.appendChild(canvas)
 
@@ -51,7 +55,7 @@ function buildAudioGraph() {
   analyser = audioContext.createAnalyser()
 
   // Попробуйте изменить на более низкие значения: 512, 256, 128, 64 ...
-  analyser.fftSize = 128
+  analyser.fftSize = 256
   bufferLength = analyser.frequencyBinCount
   dataArray = new Uint8Array(bufferLength)
 
@@ -63,10 +67,6 @@ function visualize() {
   // очистить canvas
   canvasContext.clearRect(0, 0, width, height)
 
-  // Или используйте заливку RGBA, чтобы получить небольшой эффект размытия
-  //canvasContext.fillStyle = 'rgba (0, 0, 0, 0.5)';
-  //canvasContext.fillRect(0, 0, width, height);
-
   // Получить данные анализатора
   analyser.getByteFrequencyData(dataArray)
 
@@ -74,20 +74,22 @@ function visualize() {
       let barHeight
       let x = 0
 
-      // значения изменяются от 0 до 255, а высота холста равна 100. Давайте изменим масштаб
-      // перед отрисовкой. Это масштабный коэффициент
-      let heightScale = height / 255
+      let range = 0.5 * 0.75
 
-      for(let i = 0; i < bufferLength; i++) {
+      for(let i = 1; i < bufferLength * range + 1; i++) {
         barHeight = dataArray[i]
-        // console.log(barHeight)
+
+
+        // фильтр высоких частот
+        barHeight =  Math.abs(((1 / 6 * (dataArray[i + 1]) || 0) + (-2 / 3 * (dataArray[i] || 0))  + (3 / 2 * (dataArray[i - 1] || 0))))
+        // barHeight *= (Math.exp(-0.5 * ((i - bufferLength * range) / (bufferLength / 4))**2) - 0) * 1
 
         canvasContext.fillStyle = `rgb(
-          ${126 + ((255 - 126) / 255 * barHeight)},
-          ${230 + ((195 - 230) / 255 * barHeight)},
-          ${255 + ((100 - 255) / 255 * barHeight)}
+          ${126 + ((235 - 126) / 255 * barHeight)},
+          ${230 + ((197 - 230) / 255 * barHeight)},
+          ${255 + ((109 - 255) / 255 * barHeight)}
           )`
-        barHeight *= heightScale
+
         canvasContext.fillRect(x, (height - barHeight) / 2, barWidth, barHeight / 2)
         canvasContext.fillRect(x, height / 2 + 8.75, barWidth, barHeight / 2)
         // 10 - количество пикселей между столбцами
